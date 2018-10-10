@@ -582,33 +582,37 @@ static dispatch_once_t srand48OnceToken;
 }
 
 - (void)setupDisableProductCategories{
-    self.disableProductCategories = NO;
-    NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestDisableProductCategories];
-    if (!experimentDict) {
-        experimentDict = @{@"Yes" : @0, @"No" : @1};
-    }
-    [OLKiteABTesting splitTestWithName:kOLKiteABTestDisableProductCategories
-                            conditions:@{
-                                         @"Yes" : safeObject(experimentDict[@"Yes"]),
-                                         @"No" : safeObject(experimentDict[@"No"])
-                                         } block:^(id choice) {
-                                             self.disableProductCategories = [choice isEqualToString:@"Yes"];
-                                         }];
+//    self.disableProductCategories = NO;
+//    NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestDisableProductCategories];
+//    if (!experimentDict) {
+//        experimentDict = @{@"Yes" : @0, @"No" : @1};
+//    }
+//    [OLKiteABTesting splitTestWithName:kOLKiteABTestDisableProductCategories
+//                            conditions:@{
+//                                         @"Yes" : safeObject(experimentDict[@"Yes"]),
+//                                         @"No" : safeObject(experimentDict[@"No"])
+//                                         } block:^(id choice) {
+//                                             self.disableProductCategories = [choice isEqualToString:@"Yes"];
+//                                         }];
+    
+    self.disableProductCategories = YES;
 }
 
 - (void)setupSkipProductOverviewTest{
-    self.skipProductOverview = NO;
-    NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestSkipProductOverview];
-    if (!experimentDict) {
-        experimentDict = @{@"Yes" : @0, @"No" : @1};
-    }
-    [OLKiteABTesting splitTestWithName:kOLKiteABTestSkipProductOverview
-                            conditions:@{
-                                         @"Yes" : safeObject(experimentDict[@"Yes"]),
-                                         @"No" : safeObject(experimentDict[@"No"])
-                                         } block:^(id choice) {
-                                             self.skipProductOverview = [choice isEqualToString:@"Yes"];
-                                         }];
+//    self.skipProductOverview = NO;
+//    NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestSkipProductOverview];
+//    if (!experimentDict) {
+//        experimentDict = @{@"Yes" : @0, @"No" : @1};
+//    }
+//    [OLKiteABTesting splitTestWithName:kOLKiteABTestSkipProductOverview
+//                            conditions:@{
+//                                         @"Yes" : safeObject(experimentDict[@"Yes"]),
+//                                         @"No" : safeObject(experimentDict[@"No"])
+//                                         } block:^(id choice) {
+//                                             self.skipProductOverview = [choice isEqualToString:@"Yes"];
+//                                         }];
+    
+    self.skipProductOverview = YES;
 }
 
 - (void)setupMinimalNavigationBarTest{
