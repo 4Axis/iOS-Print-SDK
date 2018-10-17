@@ -76,7 +76,6 @@ static OLProductTemplateSyncRequest *inProgressSyncRequest = nil;
 static BOOL partial = NO;
 
 @interface OLProductTemplate ()
-@property (nonatomic, strong) NSDictionary<NSString *, NSDecimalNumber *> *costsByCurrencyCode;
 @property (nonatomic, assign, readwrite) NSUInteger quantityPerSheet;
 @property (strong, nonatomic) NSArray *_Nullable supportedOptions;
 @end
@@ -115,7 +114,7 @@ static BOOL partial = NO;
         _identifier = identifier;
         _name = name;
         _quantityPerSheet = quantity;
-        self.costsByCurrencyCode = costs;
+        self.costsForCurrencyCode = costs;
         _enabled = enabled;
     }
     
@@ -157,11 +156,11 @@ static BOOL partial = NO;
 }
 
 - (NSDecimalNumber *)costPerSheetInCurrencyCode:(NSString *)currencyCode {
-    return self.costsByCurrencyCode[currencyCode];
+    return self.costsForCurrencyCode[currencyCode];
 }
 
 - (NSArray *)currenciesSupported {
-    return self.costsByCurrencyCode.allKeys;
+    return self.costsForCurrencyCode.allKeys;
 }
 
 + (void)sync {
@@ -281,7 +280,7 @@ static BOOL partial = NO;
     [aCoder encodeObject:self.name forKey:kKeyName];
     [aCoder encodeInteger:self.quantityPerSheet forKey:kKeyQuantity];
     [aCoder encodeBool:self.enabled forKey:kKeyEnabled];
-    [aCoder encodeObject:self.costsByCurrencyCode forKey:kKeyCostsByCurrency];
+    [aCoder encodeObject:self.costsForCurrencyCode forKey:kKeyCostsByCurrency];
     [aCoder encodeObject:self.coverPhotoURL forKey:kKeyCoverPhotosDict];
     [aCoder encodeObject:self.productPhotographyURLs forKey:kKeyProductPhotographyURLs];
     [aCoder encodeObject:self.labelColor forKey:kKeyLabelColor];
@@ -326,7 +325,7 @@ static BOOL partial = NO;
         _name = [aDecoder decodeObjectForKey:kKeyName];
         _quantityPerSheet = [aDecoder decodeIntegerForKey:kKeyQuantity];
         _enabled = [aDecoder decodeBoolForKey:kKeyEnabled];
-        _costsByCurrencyCode = [aDecoder decodeObjectForKey:kKeyCostsByCurrency];
+        _costsForCurrencyCode = [aDecoder decodeObjectForKey:kKeyCostsByCurrency];
         _coverPhotosDict = [aDecoder decodeObjectForKey:kKeyCoverPhotosDict];
         _productPhotographyURLs = [aDecoder decodeObjectForKey:kKeyProductPhotographyURLs];
         _templateUI = [[aDecoder decodeObjectForKey:kKeyTemplateUI] intValue];

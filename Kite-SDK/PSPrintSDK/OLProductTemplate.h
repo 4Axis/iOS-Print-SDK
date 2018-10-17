@@ -106,6 +106,7 @@ typedef NS_ENUM(NSInteger, OLImageBlendMode) {
 @property (assign, nonatomic) BOOL supportsTextOnBorder;
 @property (strong, nonatomic) NSDictionary<NSString *, NSArray<OLShippingClass *> *> * _Nullable shippingClasses;
 @property (strong, nonatomic) NSDictionary * _Nullable countryMapping;
+@property (nonatomic, strong) NSDictionary<NSString *, NSDecimalNumber *> *costsForCurrencyCode;
 
 - (instancetype _Nonnull)initWithIdentifier:(NSString *_Nonnull)identifier name:(NSString *_Nonnull)name sheetQuantity:(NSUInteger)quantity sheetCostsByCurrencyCode:(NSDictionary<NSString *, NSDecimalNumber *> *_Nullable)costs enabled:(BOOL)enabled;
 - (NSDecimalNumber *_Nullable)costPerSheetInCurrencyCode:(NSString *_Nonnull)currencyCode;
