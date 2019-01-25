@@ -222,7 +222,12 @@ static CGFloat fadeTime = 0.3;
     
     if ([OLProductTemplate templates].count > 0){
         fadeTime = 0;
-        [[OLKiteABTesting sharedInstance] setupABTestVariants];
+        NSString *productId = self.filterProducts[0];
+        BOOL isSkip = YES;
+        if ([productId isEqualToString:@"stickers_circle"]) {
+            isSkip = NO;
+        }
+        [[OLKiteABTesting sharedInstance] setupABTestVariantsAndSkipProductOveriew:isSkip];
         
         [self.operationQueue addOperation:self.templateSyncOperation];
         [self.operationQueue addOperation:self.remotePlistSyncOperation];
@@ -230,7 +235,13 @@ static CGFloat fadeTime = 0.3;
     }
     else{
         __weak OLKiteViewController *welf = self;
-        [[OLKiteABTesting sharedInstance] fetchRemotePlistsWithCompletionHandler:^{
+        NSString *productId =  self.filterProducts[0];
+        NSLog(@"%@",productId);
+        BOOL isSkip = YES;
+        if ([productId isEqualToString:@"stickers_circle"]) {
+            isSkip = NO;
+        }
+        [[OLKiteABTesting sharedInstance] fetchRemotePlistsAndSkipProductOverview:isSkip withCompletionHandler:^{
             [welf.operationQueue addOperation:welf.remotePlistSyncOperation];
         }];
         [OLProductTemplate syncWithCompletionHandler:^(id templates, id error){}];
@@ -520,7 +531,12 @@ static CGFloat fadeTime = 0.3;
         if (!self.remoteThemePlistSyncOperation.finished && ![self.operationQueue.operations containsObject:self.remoteThemePlistSyncOperation]){
             if ([OLKiteABTesting sharedInstance].userConfig[@"theme"]){
                 __weak OLKiteViewController *welf = self;
-                [[OLKiteABTesting sharedInstance] fetchRemotePlistsWithCompletionHandler:^{
+                NSString *productId =  self.filterProducts[0];
+                BOOL isSkip = YES;
+                if ([productId isEqualToString:@"stickers_circle"]) {
+                    isSkip = NO;
+                }
+                [[OLKiteABTesting sharedInstance] fetchRemotePlistsAndSkipProductOverview:isSkip withCompletionHandler:^{
                     if (!welf.remoteThemePlistSyncOperation.executing && !welf.remoteThemePlistSyncOperation.finished && ![self.operationQueue.operations containsObject:self.remoteThemePlistSyncOperation]){
                         [welf.remoteThemePlistSyncOperation addExecutionBlock:^{}];
                         [welf.operationQueue addOperation:welf.remoteThemePlistSyncOperation];

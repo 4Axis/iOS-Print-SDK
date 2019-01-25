@@ -418,7 +418,7 @@ static dispatch_once_t srand48OnceToken;
     return user;
 }
 
-- (void)fetchRemotePlistsWithCompletionHandler:(void(^)(void))handler{
+- (void)fetchRemotePlistsAndSkipProductOverview:(BOOL)isSkip withCompletionHandler:(void(^)(void))handler{
     [self resetTheme];
     [OLKiteABTesting fetchRemotePlistWithURL:[NSString stringWithFormat:@"https://s3.amazonaws.com/sdk-static/kite-ios-remote-%@.plist", [OLKitePrintSDK apiKey]] completionHandler:^(NSError *error){
         if (error){
@@ -432,12 +432,12 @@ static dispatch_once_t srand48OnceToken;
             }
             
             [OLKiteABTesting fetchRemotePlistWithURL:url completionHandler:^(NSError *error2){
-                [self setupABTestVariants];
+                [self setupABTestVariantsAndSkipProductOveriew:isSkip];
                 handler();
             }];
         }
         else{
-            [self setupABTestVariants];
+            [self setupABTestVariantsAndSkipProductOveriew:isSkip];
             handler();
         }
     }];
@@ -598,21 +598,24 @@ static dispatch_once_t srand48OnceToken;
     self.disableProductCategories = YES;
 }
 
-- (void)setupSkipProductOverviewTest{
-//    self.skipProductOverview = NO;
-//    NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestSkipProductOverview];
-//    if (!experimentDict) {
-//        experimentDict = @{@"Yes" : @0, @"No" : @1};
-//    }
-//    [OLKiteABTesting splitTestWithName:kOLKiteABTestSkipProductOverview
-//                            conditions:@{
-//                                         @"Yes" : safeObject(experimentDict[@"Yes"]),
-//                                         @"No" : safeObject(experimentDict[@"No"])
-//                                         } block:^(id choice) {
-//                                             self.skipProductOverview = [choice isEqualToString:@"Yes"];
-//                                         }];
+- (void)setupSkipProductOverviewTest:(BOOL)isSkip{
+    self.skipProductOverview = isSkip;
     
-    self.skipProductOverview = YES;
+    if (!isSkip) {
+        NSDictionary *experimentDict = [[NSUserDefaults standardUserDefaults] objectForKey:kOLKiteABTestSkipProductOverview];
+        if (!experimentDict) {
+            experimentDict = @{@"Yes" : @0, @"No" : @1};
+        }
+        [OLKiteABTesting splitTestWithName:kOLKiteABTestSkipProductOverview
+                                conditions:@{
+                                             @"Yes" : safeObject(experimentDict[@"Yes"]),
+                                             @"No" : safeObject(experimentDict[@"No"])
+                                             } block:^(id choice) {
+                                                 self.skipProductOverview = [choice isEqualToString:@"Yes"];
+                                             }];
+    }
+    
+    //self.skipProductOverview = YES;
 }
 
 - (void)setupMinimalNavigationBarTest{
@@ -723,7 +726,7 @@ static dispatch_once_t srand48OnceToken;
     [self setupOfferPayPalTest];
 }
 
-- (void)setupABTestVariants{
+- (void)setupABTestVariantsAndSkipProductOveriew:(BOOL)isSkip{
     [self setupQualityBannerTypeTest];
     [self setupProductTileStyleTest];
     [self setupPackReviewStyleTest];
@@ -731,7 +734,7 @@ static dispatch_once_t srand48OnceToken;
     [self setupHidePriceTest];
     [self setupShowProductDescriptionScreenBeforeShippingTest];
     [self setupProgressiveTemplateLoadingTest];
-    [self setupSkipProductOverviewTest];
+    [self setupSkipProductOverviewTest:isSkip];
     [self setupDisableProductCategories];
     [self setupMinimalNavigationBarTest];
     [self groupSetupShippingScreenTests];
