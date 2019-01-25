@@ -109,6 +109,6 @@ static NSString *const kOLKiteLightThemeButtonRoundCorners = @"ly.kite.theme.lig
 + (instancetype)sharedInstance;
 - (void)fetchRemotePlistsAndSkipProductOverview:(BOOL)isSkip withCompletionHandler:(void(^)(void))handler;
 - (void)prefetchRemoteImages;
-- (void)setupABTestVariantsAndSkipProductOveriew;
+- (void)setupABTestVariantsAndSkipProductOveriew:(BOOL)isSkip;
 - (void)setupCoverPhotoTestWithExperimentDict:(NSDictionary *)experimentDict;
 @end
